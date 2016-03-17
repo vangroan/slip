@@ -95,7 +95,7 @@ struct SlipVM {
     SlipByte keys[SLIP_KEYS];
 
     // The program counter.
-    size_t PC;
+    int16_t PC;
 
 };
 
