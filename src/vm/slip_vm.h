@@ -3,6 +3,7 @@
 #define SLIP_VM_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include "slip_common.h"
 
 // Size of the vm's memory
@@ -21,6 +22,9 @@
 
 // The number of keybaord keys that can be entered.
 #define SLIP_KEYS 16
+
+// The size of the subroutine call stack
+#define SLIP_STACK 16
 
 
 typedef struct SlipConfig SlipConfig;
@@ -59,8 +63,18 @@ struct SlipVM {
     // register used for arithmetic carries or borrows.
     SlipByte V[SLIP_REGISTERS];
 
-    // The address register, used in several opcodes for memory operations.
-    SlipByte I;
+    // The address register, used in several opcodes for memory operations. It
+    // is 16-bits wide
+    int16_t I;
+
+    // The stack pointer.
+    SlipByte SP;
+
+    // The subroutine call stack. Whenever a subroutine is called, the current
+    // address is stored on the stack, and the stack pointer is incremented.
+    // Returning from a subrouting pops the address off the stack and positions
+    // the program counter to the address.
+    int16_t stack[SLIP_STACK];
 
     // The delay timer. It is used for timing events in games, and counts down 
     // at 60 hertz.
@@ -79,6 +93,9 @@ struct SlipVM {
     // The keyboard keys that are pressed, stored as flags. The keyboard is 
     // labeled with hex numbers from 0 to F.
     SlipByte keys[SLIP_KEYS];
+
+    // The program counter.
+    size_t PC;
 
 };
 
