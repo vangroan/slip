@@ -4,10 +4,14 @@
 void slipInitConfig(SlipConfig* config) {
     config->inputFn = NULL;
     config->displayFn = NULL;
+    config->writeFn = NULL;
 }
 
 SlipVM* slipNewVM(SlipConfig* config) {
     SlipVM* vm = (SlipVM*)malloc(sizeof(SlipVM));
+
+    // Copy config
+    vm->config = *config;
 
     // Memory
     vm->memory = (SlipByte*)malloc(SLIP_MEM * sizeof(SlipByte));
@@ -58,4 +62,5 @@ void slipFreeVM(SlipVM* vm) {
 
 void slipInterpret(SlipVM* vm, const char* bytecode) {
     // TODO
+    vm->config.writeFn("Starting interpreter...");
 }

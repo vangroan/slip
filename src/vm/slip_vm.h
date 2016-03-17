@@ -43,11 +43,18 @@ typedef void (*SlipInputFn)(SlipVM* vm);
 typedef void (*SlipDisplayFn)(SlipVM* vm);
 
 
+// The interpreter will use the write function callback for textual output. If
+// no function is provided, output is discarded.
+typedef void (*SlipWriteFn)(const char* message);
+
+
 struct SlipConfig {
     
     SlipInputFn inputFn;
 
     SlipDisplayFn displayFn;
+
+    SlipWriteFn writeFn;
 
     // TODO: realloc callback
 
@@ -96,6 +103,8 @@ struct SlipVM {
 
     // The program counter.
     int16_t PC;
+
+    SlipConfig config;
 
 };
 
