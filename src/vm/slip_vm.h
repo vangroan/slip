@@ -4,6 +4,8 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+
+#include "include/slip.h"
 #include "slip_common.h"
 
 // Size of the vm's memory
@@ -109,6 +111,8 @@ SlipVM* slipNewVM(SlipConfig* config);
 void slipFreeVM(SlipVM* vm);
 
 void slipInterpret(SlipVM* vm, const char* bytecode);
+
+void slipOpcodeDispatch(SlipVM* vm, int16_t opcode);
 
 
 #endif

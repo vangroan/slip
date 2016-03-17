@@ -14,8 +14,11 @@ int main(void) {
     slipInitConfig(&config);
     config.writeFn = writeFn;
 
+    // TODO: Load bytecode files
+    const char bytecode[3] = {0x1F, 0xFF, '\0'};
+
     SlipVM* vm = slipNewVM(&config);
-    slipInterpret(vm, "foobar");
+    slipInterpret(vm, bytecode);
 
     slipFreeVM(vm);
     return 0;
