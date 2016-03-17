@@ -9,6 +9,7 @@ SlipVM* slipNewVM(SlipConfig* config) {
     SlipVM* vm = (SlipVM*)malloc(sizeof(SlipVM));
 
     vm->memory = (SlipByte*)malloc(SLIP_MEM * sizeof(SlipByte));
+    vm->display = (SlipByte*)malloc(SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT * sizeof(SlipByte));
 
     return vm;
 }
@@ -16,6 +17,7 @@ SlipVM* slipNewVM(SlipConfig* config) {
 void slipFreeVM(SlipVM* vm) {
 
     free(vm->memory);
+    free(vm->display);
     free(vm);
 
 }
