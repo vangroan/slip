@@ -23,12 +23,34 @@
 #define SLIP_KEYS 16
 
 
-typedef struct {
-    // TODO: Interpreter callbacks
-} SlipConfig;
+typedef struct SlipConfig SlipConfig;
 
 
-typedef struct {
+typedef struct SlipVM SlipVM;
+
+
+// The function type for the input callback. Called before the interpreter loop
+// reads an opcode. It is used for setting the key press flags.
+typedef void (*SlipInputFn)(SlipVM* vm);
+
+
+// The function type for the display output callback. Called after the display
+// buffer has been updated.
+typedef void (*SlipDisplayFn)(SlipVM* vm);
+
+
+struct SlipConfig {
+    
+    SlipInputFn inputFn;
+
+    SlipDisplayFn displayFn;
+
+    // TODO: realloc callback
+
+};
+
+
+struct SlipVM {
 
     // The vm's memory space. Allocated on heap.
     SlipByte* memory;
@@ -58,7 +80,7 @@ typedef struct {
     // labeled with hex numbers from 0 to F.
     SlipByte keys[SLIP_KEYS];
 
-} SlipVM;
+};
 
 void slipInitConfig(SlipConfig* config);
 

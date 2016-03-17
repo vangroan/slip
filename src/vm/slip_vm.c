@@ -2,7 +2,8 @@
 #include "slip_vm.h"
 
 void slipInitConfig(SlipConfig* config) {
-    // TODO: Config defaults
+    config->inputFn = NULL;
+    config->displayFn = NULL;
 }
 
 SlipVM* slipNewVM(SlipConfig* config) {
