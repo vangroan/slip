@@ -27,12 +27,6 @@
 #define SLIP_STACK 16
 
 
-typedef struct SlipConfig SlipConfig;
-
-
-typedef struct SlipVM SlipVM;
-
-
 // The function type for the input callback. Called before the interpreter loop
 // reads an opcode. It is used for setting the key press flags.
 typedef void (*SlipInputFn)(SlipVM* vm);
