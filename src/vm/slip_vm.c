@@ -1,6 +1,10 @@
 
 #include "slip_vm.h"
 
+void slipInitConfig(SlipConfig* config) {
+    // TODO: Config defaults
+}
+
 SlipVM* slipNewVM(SlipConfig* config) {
     SlipVM* vm = (SlipVM*)malloc(sizeof(SlipVM));
 

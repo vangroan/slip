@@ -25,6 +25,7 @@ typedef struct {
 
 } SlipVM;
 
+void slipInitConfig(SlipConfig* config);
 
 SlipVM* slipNewVM(SlipConfig* config);
 
