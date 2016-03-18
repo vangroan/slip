@@ -196,6 +196,13 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                     vm->V[SLIP_OP_B(opcode)] = SLIP_OP_CD(opcode);
                     vm->PC += 2;
                 break;
+
+                // 7XNN
+                // Adds NN to VX
+                case 0x7:
+                    vm->V[SLIP_OP_B(opcode)] += SLIP_OP_CD(opcode);
+                    vm->PC += 2;
+                break;
             }
         break;
     }
