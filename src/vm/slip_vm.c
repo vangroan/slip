@@ -177,6 +177,18 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         printf("Don't skip");
                     }
                 break;
+
+                // 5XY0
+                // Skips the next instruction if VX equals VY
+                case 0x5:
+                    if (vm->V[SLIP_OP_B(opcode)] == vm->V[SLIP_OP_C(opcode)]) {
+                        vm->PC += 4;
+                        printf("Skip to 0x%04x", vm->PC);
+                    } else {
+                        vm->PC += 2;
+                        printf("Don't skip");
+                    }
+                break;
             }
         break;
     }
