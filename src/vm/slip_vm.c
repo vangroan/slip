@@ -121,8 +121,6 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
     printf("[0x%04x] 0x%04x ", vm->PC, opcode);
-    SlipByte a = (opcode & 0xF000) >> 12;
-    //SlipByte d = (opcode & 0x000F);
     
     switch (opcode) {
 
@@ -139,7 +137,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
         break;
 
         default:
-            switch(a) {
+            switch(SLIP_OP_A(opcode)) {
                 // 1NNN
                 // Jumps to address NNN
                 case 0x1:
@@ -154,6 +152,28 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                     // Store current address on stack
                     vm->stack[vm->SP++] = vm->PC;
                     vm->PC = opcode & 0x0FFF;
+                break;
+
+                // 3XNN
+                // Skips the next instruction if VX equals NN
+                case 0x3: ; // Empty statement
+                    if (vm->V[SLIP_OP_B(opcode)] == SLIP_OP_CD(opcode)) {
+                        vm->PC += 4;
+                        printf("Skip to 0x%04x", vm->PC);
+                    } else {
+                        printf("Don't skip");
+                    }
+                break;
+
+                // 4XNN
+                // Skips the next instruction if VX doesn't equal NN
+                case 0x4: ; // Empty statement
+                    if (vm->V[SLIP_OP_B(opcode)] != SLIP_OP_CD(opcode)) {
+                        vm->PC += 4;
+                        printf("Skip to 0x%04x", vm->PC);
+                    } else {
+                        printf("Don't skip");
+                    }
                 break;
             }
         break;
