@@ -86,7 +86,6 @@ void _slipLoadBytecodeIntoMemory(SlipVM* vm, SlipBytecode* bytecode) {
 
     // TODO: Handle case of bytecode not fitting in memory
     for (size_t j = 0; j < bytecode->size; j++ ) {
-        printf("Loading %d:0x%02x into ox%04x\n", j, bytecode->buffer[j], i);
         vm->memory[i++] = bytecode->buffer[j];
     }
 }
