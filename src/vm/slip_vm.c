@@ -98,6 +98,9 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     vm->PC = SLIP_MEM_START;
     uint16_t opcode;
 
+    // Break out of loop after counter reaches 0
+    int break_after = 10;
+
     _dumpMemoryRange(vm, 0x200, 0x200 + bytecode->size);
 
     // TODO: Use for loop
@@ -107,24 +110,55 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 
         // TODO: Program counter will be incremented by opcodes. For now, break 
         // to avoid infinite loop.
-        break;
+        if (break_after <= 0) {
+            break;
+        } else {
+            break_after--;
+        }
     }
     
 }
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
     printf("[0x%04x] 0x%04x ", vm->PC, opcode);
-    SlipByte op = (opcode & 0xF000) >> 12;
+    SlipByte a = (opcode & 0xF000) >> 12;
+    //SlipByte d = (opcode & 0x000F);
     
-    switch (op) {
-        
-        // 1NNN
-        // Jumps to address NNN
-        case 0x1:
-            printf("Jump to 0x%04x\n", opcode & 0x0FFF);
-            vm->PC = opcode & 0x0FFF;
+    switch (opcode) {
+
+        // 00EE
+        // Returns from a subroutine
+        case 0x00EE:
+            // Move pointer back before getting the address off it
+            vm->PC = vm->stack[--vm->SP];
+
+            // Returning to the saved address will jut result in another call,
+            // causing an infinite loop.
+            vm->PC += 2;
+            printf("Returning to 0x%04x", vm->PC);
         break;
 
+        default:
+            switch(a) {
+                // 1NNN
+                // Jumps to address NNN
+                case 0x1:
+                    printf("Jump to 0x%04x", opcode & 0x0FFF);
+                    vm->PC = opcode & 0x0FFF;
+                break;
+
+                // 2NNN
+                // Call a subroutine at NNN
+                case 0x2:
+                    printf("Call 0x%04x", opcode & 0x0FFF);
+                    // Store current address on stack
+                    vm->stack[vm->SP++] = vm->PC;
+                    vm->PC = opcode & 0x0FFF;
+                break;
+            }
+        break;
     }
+
+    printf("\n");
 
 }
