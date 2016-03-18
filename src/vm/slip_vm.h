@@ -36,6 +36,7 @@
 #define SLIP_OP_D(opcode) (opcode & 0x000F)
 
 #define SLIP_OP_CD(opcode) (opcode & 0x00FF)
+#define SLIP_OP_BCD(opcode) (opcode & 0x0FFF)
 
 // The function type for the input callback. Called before the interpreter loop
 // reads an opcode. It is used for setting the key press flags.

@@ -141,17 +141,17 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                 // 1NNN
                 // Jumps to address NNN
                 case 0x1:
-                    printf("Jump to 0x%04x", opcode & 0x0FFF);
-                    vm->PC = opcode & 0x0FFF;
+                    printf("Jump to 0x%04x", SLIP_OP_BCD(opcode));
+                    vm->PC = SLIP_OP_BCD(opcode);
                 break;
 
                 // 2NNN
                 // Call a subroutine at NNN
                 case 0x2:
-                    printf("Call 0x%04x", opcode & 0x0FFF);
+                    printf("Call 0x%04x", SLIP_OP_BCD(opcode));
                     // Store current address on stack
                     vm->stack[vm->SP++] = vm->PC;
-                    vm->PC = opcode & 0x0FFF;
+                    vm->PC = SLIP_OP_BCD(opcode);
                 break;
 
                 // 3XNN
