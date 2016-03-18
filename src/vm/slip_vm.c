@@ -114,7 +114,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 }
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
-    printf("Opcode: ox%04x\n");
+    printf("Opcode: 0x%04x\n", opcode);
     SlipByte op = (opcode & 0xF000) >> 12;
     
     switch (op) {
