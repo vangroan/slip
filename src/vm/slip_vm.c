@@ -2,6 +2,24 @@
 #include <stdio.h>
 #include "slip_vm.h"
 
+// Prints out the contents of the vm's memory. The `start` argument is 
+// inclusive and `end` is exclusive.
+void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
+    uint16_t newstart = start < 0 ? 0 : start;
+    uint16_t newend = end > SLIP_MEM ? SLIP_MEM : end;
+
+    // end before start is invalid
+    if (newstart > newend) {
+        uint16_t tmp = newend;
+        newend = newstart;
+        newstart = tmp;
+    }
+
+    for (uint16_t i = newstart; i < newend; i++) {
+        printf("[0x%04x] 0x%02x\n", i, vm->memory[i]);
+    }
+}
+
 void slipInitConfig(SlipConfig* config) {
     config->inputFn = NULL;
     config->displayFn = NULL;
