@@ -113,7 +113,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 }
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
-    printf("Opcode: 0x%04x\n", opcode);
+    printf("[0x%04x] 0x%04x ", vm->PC, opcode);
     SlipByte op = (opcode & 0xF000) >> 12;
     
     switch (op) {
@@ -121,6 +121,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
         // 1NNN
         // Jumps to address NNN
         case 0x1:
+            printf("Jump to 0x%04x\n", opcode & 0x0FFF);
             vm->PC = opcode & 0x0FFF;
         break;
 
