@@ -11,6 +11,7 @@ env = Environment(tools=['mingw'],
 source = [
     'src/app/main.c',
     'src/vm/slip_vm.c',
+    'src/util/slip_io.c',
 ]
 
 env.Program(target='build/slip', source=source)

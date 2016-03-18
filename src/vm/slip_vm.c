@@ -61,26 +61,28 @@ void slipFreeVM(SlipVM* vm) {
 
 }
 
-void _slipLoadBytecode(SlipVM* vm, const char* bytecode) {
+// Load bytecode from buffer into vm memory
+void _slipLoadBytecodeIntoMemory(SlipVM* vm, SlipBytecode* bytecode) {
     
-    int16_t b = 0;
     int16_t i = SLIP_MEM_START;
 
-    char c = bytecode[b++];
-
-    while (c != '\0') {
-        vm->memory[i++] = c;
-        c = bytecode[b++];
+    // TODO: Handle case of bytecode not fitting in memory
+    for (size_t j = 0; j < bytecode->size; j++ ) {
+        printf("Loading %d:0x%02x into ox%04x\n", j, bytecode->buffer[j], i);
+        vm->memory[i++] = bytecode->buffer[j];
     }
 }
 
-void slipInterpret(SlipVM* vm, const char* bytecode) {
+void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     // TODO: Timers
     vm->config.writeFn("Starting interpreter...\n");
-    vm->PC = SLIP_MEM_START;
-    _slipLoadBytecode(vm, bytecode);
+    _slipLoadBytecodeIntoMemory(vm, bytecode);
 
-    int16_t opcode;
+    vm->PC = SLIP_MEM_START;
+    uint16_t opcode;
+
+    printf("Memory [ox%04x]: ox%02x\n", SLIP_MEM_START, vm->memory[SLIP_MEM_START]);
+    printf("Memory [ox%04x]: ox%02x\n", SLIP_MEM_START+1, vm->memory[SLIP_MEM_START]+1);
 
     // TODO: Use for loop
     while (vm->PC < SLIP_MEM-1) {
@@ -94,8 +96,8 @@ void slipInterpret(SlipVM* vm, const char* bytecode) {
     
 }
 
-void slipOpcodeDispatch(SlipVM* vm, int16_t opcode) {
-
+void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
+    printf("Opcode: ox%04x\n");
     SlipByte op = (opcode & 0xF000) >> 12;
     
     switch (op) {

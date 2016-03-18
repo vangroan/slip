@@ -110,9 +110,9 @@ SlipVM* slipNewVM(SlipConfig* config);
 
 void slipFreeVM(SlipVM* vm);
 
-void slipInterpret(SlipVM* vm, const char* bytecode);
+void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode);
 
-void slipOpcodeDispatch(SlipVM* vm, int16_t opcode);
+void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode);
 
 
 #endif

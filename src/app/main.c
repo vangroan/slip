@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include "vm/slip_vm.h"
+#include "util/slip_io.h"
 
 
 void writeFn(const char* message) {
@@ -14,12 +15,13 @@ int main(void) {
     slipInitConfig(&config);
     config.writeFn = writeFn;
 
-    // TODO: Load bytecode files
-    const char bytecode[3] = {0x1F, 0xFF, '\0'};
+    SlipBytecode bytecode;
+    slipLoadBytecode(&bytecode, "sample/hello_world.ch8");
 
     SlipVM* vm = slipNewVM(&config);
-    slipInterpret(vm, bytecode);
+    slipInterpretBytecode(vm, &bytecode);
 
     slipFreeVM(vm);
+    slipFreeBytecode(&bytecode);
     return 0;
 }
