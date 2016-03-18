@@ -99,8 +99,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     vm->PC = SLIP_MEM_START;
     uint16_t opcode;
 
-    printf("Memory [ox%04x]: ox%02x\n", SLIP_MEM_START, vm->memory[SLIP_MEM_START]);
-    printf("Memory [ox%04x]: ox%02x\n", SLIP_MEM_START+1, vm->memory[SLIP_MEM_START]+1);
+    _dumpMemoryRange(vm, 0x200, 0x200 + bytecode->size);
 
     // TODO: Use for loop
     while (vm->PC < SLIP_MEM-1) {
