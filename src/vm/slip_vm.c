@@ -161,6 +161,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         vm->PC += 4;
                         printf("Skip to 0x%04x", vm->PC);
                     } else {
+                        vm->PC += 2;
                         printf("Don't skip");
                     }
                 break;
@@ -172,6 +173,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         vm->PC += 4;
                         printf("Skip to 0x%04x", vm->PC);
                     } else {
+                        vm->PC += 2;
                         printf("Don't skip");
                     }
                 break;
