@@ -189,6 +189,13 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         printf("Don't skip");
                     }
                 break;
+
+                // 6XNN
+                // Sets VX to NN
+                case 0x6:
+                    vm->V[SLIP_OP_B(opcode)] = SLIP_OP_CD(opcode);
+                    vm->PC += 2;
+                break;
             }
         break;
     }
