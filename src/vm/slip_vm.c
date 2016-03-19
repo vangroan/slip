@@ -203,6 +203,14 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                     vm->V[SLIP_OP_B(opcode)] += SLIP_OP_CD(opcode);
                     vm->PC += 2;
                 break;
+
+                // 8***
+                // Arithmetic opcodes
+                case 0x8:
+                    switch(SLIP_OP_D(opcode)) {
+
+                    }
+                break;
             }
         break;
     }
