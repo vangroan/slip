@@ -2,6 +2,7 @@
 #ifndef SLIP_IO_H
 #define SLIP_IO_H
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -13,5 +14,9 @@
 void slipLoadBytecode(SlipBytecode* bytecode, const char* filename);
 
 void slipFreeBytecode(SlipBytecode* bytecode);
+
+void slipAssert(bool condition, const char* message);
+
+void slipAbort(const char* message);
 
 #endif
