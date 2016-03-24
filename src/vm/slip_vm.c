@@ -218,6 +218,16 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_C(opcode)];
                             vm->PC += 2;
                         break;
+
+                        // 8XY1
+                        // Sets VX to VX OR VY
+                        case 0x1:
+                            printf("Set V0x%01x to V0x%01x OR V0x%01x", 
+                                SLIP_OP_B(opcode), SLIP_OP_B(opcode),
+                                SLIP_OP_C(opcode));
+                            vm->V[SLIP_OP_B(opcode)] |= vm->V[SLIP_OP_C(opcode)];
+                            vm->PC += 2;
+                        break;
                     }
                 break;
             }

@@ -58,6 +58,23 @@ void test_8XY0(SlipConfig* config) {
     slipFreeVM(vm);
 }
 
+void test_8XY1(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V3 to 0x0C (bx1100)
+    slipOpcodeDispatch(vm, 0x630C);
+
+    // Set V4 to 0x0A (bx1010)
+    slipOpcodeDispatch(vm, 0x640A);
+
+    // Set V3 to V3 OR V4 (0x0E / bx1110)
+    slipOpcodeDispatch(vm, 0x8341);
+    assertEqual(vm->V[0x3] == 0x0E, "Should set V3 to V3 OR V4");
+    assertEqual(vm->V[0x4] == 0x0A, "OR should not affect right hand register");
+
+    slipFreeVM(vm);
+}
+
 
 int main() {
     printf("Running tests\n");
@@ -69,6 +86,7 @@ int main() {
     test_2NNN(&config);
     test_6XNN(&config);
     test_8XY0(&config);
+    test_8XY1(&config);
 
     printf("Tests done\n");
     return 0;
