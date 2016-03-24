@@ -24,7 +24,7 @@
 #define SLIP_SCREEN_WIDTH 64
 #define SLIP_SCREEN_HEIGHT 32
 
-// The number of keybaord keys that can be entered.
+// The number of keyboard keys that can be entered.
 #define SLIP_KEYS 16
 
 // The size of the subroutine call stack
