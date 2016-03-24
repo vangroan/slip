@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "slip_vm.h"
 
+
 // Prints out the contents of the vm's memory. The `start` argument is 
 // inclusive and `end` is exclusive.
 void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
@@ -20,11 +21,13 @@ void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
     }
 }
 
+
 void slipInitConfig(SlipConfig* config) {
     config->inputFn = NULL;
     config->displayFn = NULL;
     config->writeFn = NULL;
 }
+
 
 SlipVM* slipNewVM(SlipConfig* config) {
     SlipVM* vm = (SlipVM*)malloc(sizeof(SlipVM));
@@ -71,6 +74,7 @@ SlipVM* slipNewVM(SlipConfig* config) {
     return vm;
 }
 
+
 void slipFreeVM(SlipVM* vm) {
 
     free(vm->memory);
@@ -78,6 +82,7 @@ void slipFreeVM(SlipVM* vm) {
     free(vm);
 
 }
+
 
 // Load bytecode from buffer into vm memory
 void _slipLoadBytecodeIntoMemory(SlipVM* vm, SlipBytecode* bytecode) {
@@ -89,6 +94,7 @@ void _slipLoadBytecodeIntoMemory(SlipVM* vm, SlipBytecode* bytecode) {
         vm->memory[i++] = bytecode->buffer[j];
     }
 }
+
 
 void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     // TODO: Timers
@@ -118,6 +124,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     }
     
 }
+
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
     printf("[0x%04x] 0x%04x ", vm->PC, opcode);

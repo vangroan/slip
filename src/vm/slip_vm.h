@@ -2,11 +2,13 @@
 #ifndef SLIP_VM_H
 #define SLIP_VM_H
 
+
 #include <stdlib.h>
 #include <stdint.h>
 
 #include "include/slip.h"
 #include "slip_common.h"
+
 
 // Size of the vm's memory
 #define SLIP_MEM 4096
@@ -37,6 +39,7 @@
 
 #define SLIP_OP_CD(opcode) (opcode & 0x00FF)
 #define SLIP_OP_BCD(opcode) (opcode & 0x0FFF)
+
 
 // The function type for the input callback. Called before the interpreter loop
 // reads an opcode. It is used for setting the key press flags.
@@ -113,13 +116,18 @@ struct SlipVM {
 
 };
 
+
 void slipInitConfig(SlipConfig* config);
+
 
 SlipVM* slipNewVM(SlipConfig* config);
 
+
 void slipFreeVM(SlipVM* vm);
 
+
 void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode);
+
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode);
 
