@@ -34,6 +34,31 @@ void test_2NNN(SlipConfig* config) {
 }
 
 
+void test_6XNN(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V2 to 0x45
+    slipOpcodeDispatch(vm, 0x6245);
+    assertEqual(vm->V[0x2] == 0x45, "Should set register V2 to 0x45");
+
+    slipFreeVM(vm);
+}
+
+
+void test_8XY0(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V4 to 0x23
+    slipOpcodeDispatch(vm, 0x6423);
+
+    // Set V3 to V4
+    slipOpcodeDispatch(vm, 0x8340);
+    assertEqual(vm->V[0x3] == vm->V[0x4], "Should set register V3 to V4");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
 
@@ -42,6 +67,8 @@ int main() {
 
     test_1NNN(&config);
     test_2NNN(&config);
+    test_6XNN(&config);
+    test_8XY0(&config);
 
     printf("Tests done\n");
     return 0;
