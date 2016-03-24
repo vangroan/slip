@@ -94,6 +94,11 @@ void test_8XY2(SlipConfig* config) {
 }
 
 
+void test_8XY3(SlipConfig* config) {
+    skip("Should set VX to VX XOR VY");
+}
+
+
 int main() {
     printf("Running tests\n");
 
@@ -106,6 +111,7 @@ int main() {
     test_8XY0(&config);
     test_8XY1(&config);
     test_8XY2(&config);
+    test_8XY3(&config);
 
     printf("Tests done\n");
     return 0;
