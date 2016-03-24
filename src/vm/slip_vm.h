@@ -32,7 +32,7 @@
 // (2-bytes)
 #define SLIP_OP_A(opcode) ((opcode & 0xF000) >> 12)
 #define SLIP_OP_B(opcode) ((opcode & 0x0F00) >> 8)
-#define SLIP_OP_C(opcode) ((opcode & 0x0F00) >> 8)
+#define SLIP_OP_C(opcode) ((opcode & 0x00F0) >> 4)
 #define SLIP_OP_D(opcode) (opcode & 0x000F)
 
 #define SLIP_OP_CD(opcode) (opcode & 0x00FF)
