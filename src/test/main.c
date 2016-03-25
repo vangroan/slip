@@ -103,10 +103,37 @@ void test_8XY3(SlipConfig* config) {
     // Set V4 to 0x07 (bx0111)
     slipOpcodeDispatch(vm, 0x6407);
 
-    // Set V3 to V3 OR V4 (0x0B / bx1011)
+    // Set V3 to V3 AND V4 (0x0B / bx1011)
     slipOpcodeDispatch(vm, 0x8343);
     assertEqual(vm->V[0x3] == 0x0B, "Should set V3 to V3 XOR V4");
     assertEqual(vm->V[0x4] == 0x07, "AND should not affect right hand register");
+
+    slipFreeVM(vm);
+}
+
+
+void test_8XY4(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V3 to 0xFF (bx11111111)
+    slipOpcodeDispatch(vm, 0x63FF);
+
+    // Set V4 to 0xFF (bx11111111)
+    slipOpcodeDispatch(vm, 0x64FF);
+
+    // Add V4 to V3. 0x1FE masked to 0xFE. Set carry flag to 1
+    slipOpcodeDispatch(vm, 0x8344);
+    assertEqual(vm->V[0x3] == 0xFE, "Should add V4 to V3");
+    assertEqual(vm->V[0xF] == 0x1, "Should set carry to 1");
+    assertEqual(vm->V[0x4] == 0xFF, "XOR should not affect right hand register");
+
+    // Set V2 to 0x01
+    slipOpcodeDispatch(vm, 0x6201);
+
+    // Add V2 to V3
+    slipOpcodeDispatch(vm, 0x8324);
+    assertEqual(vm->V[0x3] == 0xFF, "Should add V2 to V3");
+    assertEqual(vm->V[0xF] == 0x0, "Should set carry to 0");
 
     slipFreeVM(vm);
 }
@@ -126,6 +153,7 @@ int main() {
     test_8XY1(&config);
     test_8XY2(&config);
     test_8XY3(&config);
+    test_8XY4(&config);
 
     printf("\n");
     printf("Tests done.\n");

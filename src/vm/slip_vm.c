@@ -255,6 +255,20 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                             vm->V[SLIP_OP_B(opcode)] ^= vm->V[SLIP_OP_C(opcode)];
                             vm->PC += 2;
                         break;
+
+                        // 8XY4
+                        // Adds VY to VX. VF is set to 1 when there's a carry,
+                        // and to 0 when there isn't.
+                        case 0x4:
+                            printf("Add V%01x to V%01x", SLIP_OP_C(opcode), 
+                                SLIP_OP_B(opcode));
+                            SlipByte x = SLIP_OP_B(opcode);
+                            SlipByte y = SLIP_OP_C(opcode);
+                            uint16_t result = vm->V[x] + vm->V[y];
+                            vm->V[0xF] = result > 0xFF ? 1 : 0;
+                            vm->V[x] = (SlipByte) (result & 0xFF);
+                            vm->PC += 2;
+                        break;
                     }
                 break;
             }
