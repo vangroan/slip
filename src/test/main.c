@@ -139,6 +139,15 @@ void test_8XY4(SlipConfig* config) {
 }
 
 
+void test_8XY5(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    skip("TODO: hould subtract VY from VX\n");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -154,6 +163,7 @@ int main() {
     test_8XY2(&config);
     test_8XY3(&config);
     test_8XY4(&config);
+    test_8XY5(&config);
 
     printf("\n");
     printf("Tests done.\n");
