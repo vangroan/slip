@@ -142,7 +142,21 @@ void test_8XY4(SlipConfig* config) {
 void test_8XY5(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
-    skip("TODO: hould subtract VY from VX\n");
+    skip("TODO: should subtract VY from VX\n");
+
+    slipFreeVM(vm);
+}
+
+
+void test_8XY6(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V3 to 0xFF
+    slipOpcodeDispatch(vm, 0x63FF);
+
+    // Shift V3 right, resulting in 0x7F
+    slipOpcodeDispatch(vm, 0x8306);
+    assertEqual(vm->V[0x3] == 0x7F, "Should shift V3 right");
 
     slipFreeVM(vm);
 }
@@ -164,6 +178,7 @@ int main() {
     test_8XY3(&config);
     test_8XY4(&config);
     test_8XY5(&config);
+    test_8XY6(&config);
 
     printf("\n");
     printf("Tests done.\n");
