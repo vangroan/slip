@@ -273,8 +273,8 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // VY is subtracted from VX. VF is set to 0 when there's
                         // a borrow, and 1 when there isn't.
                         case 0x5:
-                            printf("Subtract V%01x to V%01x", SLIP_OP_C(opcode), 
-                                SLIP_OP_B(opcode));
+                            printf("Subtract V%01x from V%01x", 
+                                SLIP_OP_C(opcode), SLIP_OP_B(opcode));
                             vm->V[0xF] = vm->V[SLIP_OP_B(opcode)] < vm->V[SLIP_OP_C(opcode)] ? 1 : 0;
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_B(opcode)] - vm->V[SLIP_OP_C(opcode)];
                             vm->PC += 2;
