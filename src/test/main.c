@@ -208,7 +208,17 @@ void test_9XY0(SlipConfig* config) {
     // Skip next instruction
     slipOpcodeDispatch(vm, 0x9120);
     assertEqual(vm->PC == 0x8, "Should skip instruction if V1 and V2 are unequal");
-    printf("PC: %d\n", vm->PC);
+
+    slipFreeVM(vm);
+}
+
+
+void test_ANNN(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    slipOpcodeDispatch(vm, 0xA208);
+    assertEqual(vm->I == 0x208, "Should set register I to 0x208");
+
     slipFreeVM(vm);
 }
 
@@ -233,6 +243,7 @@ int main() {
     test_8XY7(&config);
     test_8XYE(&config);
     test_9XY0(&config);
+    test_ANNN(&config);
 
     printf("\n");
     printf("Tests done.\n");
