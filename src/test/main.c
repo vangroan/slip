@@ -250,14 +250,15 @@ void test_keys(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
     // Press key A and B down
-    slipKeyDown(vm, SLIP_KEY_A | SLIP_KEY_B);
-    assertEqual((vm->keys & SLIP_KEY_A) == SLIP_KEY_A, "Should press key A");
-    assertEqual((vm->keys & SLIP_KEY_C) != SLIP_KEY_C, "Should not press other keys");
-
+    slipKeyDown(vm, 0xA);
+    slipKeyDown(vm, 0xB);
+    assertEqual(slipIsKeyDown(vm, 0xA), "Should press key A");
+    assertEqual(!slipIsKeyDown(vm, 0xC), "Should not press other keys");
+    
     // Release key A but not key B
-    slipKeyUp(vm, SLIP_KEY_A);
-    assertEqual((vm->keys & SLIP_KEY_A) == 0x0, "Should release key A");
-    assertEqual((vm->keys & SLIP_KEY_B) != 0x0, "Should not release key B");
+    slipKeyUp(vm, 0xA);
+    assertEqual(!slipIsKeyDown(vm, 0xA), "Should release key A");
+    assertEqual(slipIsKeyDown(vm, 0xB), "Should not release key B");
 
     slipFreeVM(vm);
 }

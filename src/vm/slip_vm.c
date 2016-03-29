@@ -69,7 +69,9 @@ SlipVM* slipNewVM(SlipConfig* config) {
     vm->display = (SlipByte*)malloc(SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT * sizeof(SlipByte));
 
     // Keys
-    vm->keys = 0x0000;
+    for (int i = 0; i < SLIP_NUM_KEYS; i++) {
+        vm->keys[i] = 0x0;
+    }
 
     // Program Counter
     vm->PC = 0x0;
@@ -129,13 +131,17 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 }
 
 
-void slipKeyDown(SlipVM* vm, const uint16_t keys) {
-    vm->keys |= keys;
+void slipKeyDown(SlipVM* vm, const uint8_t key) {
+    vm->keys[key % SLIP_NUM_KEYS] = true;
 }
 
 
-void slipKeyUp(SlipVM* vm, const uint16_t keys) {
-    vm->keys &= ~keys;
+void slipKeyUp(SlipVM* vm, const uint8_t key) {
+    vm->keys[key % SLIP_NUM_KEYS] = false;
+}
+
+bool slipIsKeyDown(SlipVM* vm, const uint8_t key) {
+    return vm->keys[key % SLIP_NUM_KEYS];
 }
 
 
@@ -256,7 +262,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                 // EX9E
                 // Skips the next instruction if the key stored in VX is pressed
                 case 0xE:
-                    if ((vm->V[SLIP_OP_B(opcode)] & vm->keys) == vm->keys)
+                    if (slipIsKeyDown(vm, vm->V[SLIP_OP_B(opcode)]))
                         vm->PC += 2;
                     vm->PC += 2;
                 break;
@@ -370,4 +376,11 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
 
     printf("\n");
 
+}
+
+
+void slipDumpKeys(SlipVM* vm) {
+    for (int i = 0; i < SLIP_NUM_KEYS; i++) {
+        printf("0x%02x %s\n", i, vm->keys[i] ? "down" : "up");
+    }
 }
