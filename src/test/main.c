@@ -171,9 +171,10 @@ void test_8XY7(SlipConfig* config) {
     // Set V4 to 0x09
     slipOpcodeDispatch(vm, 0x6409);
 
-    // Subtract V3 from V4. Expect V3 == 0x13
+    // Subtract V3 from V4. Expect V3 == 0xED
     slipOpcodeDispatch(vm, 0x8347);
-    assertEqual(vm->V[0x3] == 0x13, "Should subtract V3 from V4");
+    assertEqual(vm->V[0x3] == 0xED, "Should subtract V3 from V4");
+    assertEqual(vm->V[0xF] == 0x1, "Should set borrow to 1");
 
     slipFreeVM(vm);
 }
@@ -196,6 +197,7 @@ int main() {
     test_8XY4(&config);
     test_8XY5(&config);
     test_8XY6(&config);
+    test_8XY7(&config);
 
     printf("\n");
     printf("Tests done.\n");
