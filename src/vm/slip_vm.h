@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 
 #include "include/slip.h"
 #include "slip_common.h"
@@ -115,6 +116,10 @@ struct SlipVM {
     SlipConfig config;
 
 };
+
+
+// TODO: VM specific random state
+void seedRandom();
 
 
 void slipInitConfig(SlipConfig* config);

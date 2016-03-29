@@ -3,6 +3,11 @@
 #include "slip_vm.h"
 
 
+void seedRandom() {
+    srand(time(NULL));
+}
+
+
 // Prints out the contents of the vm's memory. The `start` argument is 
 // inclusive and `end` is exclusive.
 void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
@@ -230,6 +235,13 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                 // Set I to NNN plus V0
                 case 0xB:
                     vm->I = SLIP_OP_BCD(opcode) + vm->V[0x0];
+                    vm->PC += 2;
+                break;
+
+                // CXNN
+                // Set VX to a random number masked to NN
+                case 0xC:
+                    vm->V[SLIP_OP_B(opcode)] = (rand() % 0xFF) & SLIP_OP_CD(opcode);
                     vm->PC += 2;
                 break;
 

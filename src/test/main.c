@@ -241,6 +241,8 @@ int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
 
+    seedRandom();
+
     SlipConfig config;
     slipInitConfig(&config);
 
