@@ -181,6 +181,21 @@ void test_8XY7(SlipConfig* config) {
 }
 
 
+void test_8XYE(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V3 to 0xF0
+    slipOpcodeDispatch(vm, 0x63F0);
+
+    // Shift V3 left, set VF to 1. Expect 0xE0
+    slipOpcodeDispatch(vm, 0x830E);
+    assertEqual(vm->V[0x3] == 0xE0, "Should shift V3 left by 1");
+    assertEqual(vm->V[0xF] == 0x1, "Should set flag to 1");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -199,6 +214,7 @@ int main() {
     test_8XY5(&config);
     test_8XY6(&config);
     test_8XY7(&config);
+    test_8XYE(&config);
 
     printf("\n");
     printf("Tests done.\n");

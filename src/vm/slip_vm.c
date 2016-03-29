@@ -299,6 +299,18 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                                 SLIP_OP_B(opcode), SLIP_OP_C(opcode));
                             vm->V[0xF] = vm->V[SLIP_OP_B(opcode)] > vm->V[SLIP_OP_C(opcode)] ? 1 : 0;
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_C(opcode)] - vm->V[SLIP_OP_B(opcode)];
+                            vm->PC += 2;
+                        break;
+
+                        // 8XYE
+                        // Shift VX left by one. VF is set to the value of the
+                        // most significant bit of VX before the shift. Y is
+                        // ignored
+                        case 0xE:
+                            printf("Shift V%01x left by 1", SLIP_OP_B(opcode));
+                            vm->V[0xF] = (vm->V[SLIP_OP_B(opcode)] & 0x80) >> 7;
+                            vm->V[SLIP_OP_B(opcode)] <<= 1;
+                            vm->PC += 2;
                         break;
                     }
                 break;
