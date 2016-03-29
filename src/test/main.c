@@ -157,6 +157,7 @@ void test_8XY6(SlipConfig* config) {
     // Shift V3 right, resulting in 0x7F
     slipOpcodeDispatch(vm, 0x8306);
     assertEqual(vm->V[0x3] == 0x7F, "Should shift V3 right");
+    assertEqual(vm->V[0xF] == 0x1, "Should set flag to 1");
 
     slipFreeVM(vm);
 }
