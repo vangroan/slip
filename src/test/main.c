@@ -162,6 +162,23 @@ void test_8XY6(SlipConfig* config) {
 }
 
 
+void test_8XY7(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V3 to 0x1C
+    slipOpcodeDispatch(vm, 0x631C);
+
+    // Set V4 to 0x09
+    slipOpcodeDispatch(vm, 0x6409);
+
+    // Subtract V3 from V4. Expect V3 == 0x13
+    slipOpcodeDispatch(vm, 0x8347);
+    assertEqual(vm->V[0x3] == 0x13, "Should subtract V3 from V4");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
