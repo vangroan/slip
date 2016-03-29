@@ -223,6 +223,20 @@ void test_ANNN(SlipConfig* config) {
 }
 
 
+void test_BNNN(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V0 to 0x08
+    slipOpcodeDispatch(vm, 0x6008);
+
+    // Set I to 0x500 + 0x08
+    slipOpcodeDispatch(vm, 0xB500);
+    assertEqual(vm->I == 0x508, "Should set register I to 0x500 + 0x08");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -244,6 +258,7 @@ int main() {
     test_8XYE(&config);
     test_9XY0(&config);
     test_ANNN(&config);
+    test_BNNN(&config);
 
     printf("\n");
     printf("Tests done.\n");
