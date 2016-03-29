@@ -237,6 +237,15 @@ void test_BNNN(SlipConfig* config) {
 }
 
 
+void test_EX9E(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    
+
+    slipFreeVM(vm);
+}
+
+
 void test_keys(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
@@ -278,6 +287,7 @@ int main() {
     test_9XY0(&config);
     test_ANNN(&config);
     test_BNNN(&config);
+    test_EX9E(&config);
 
     test_keys(&config);
 

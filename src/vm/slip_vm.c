@@ -253,6 +253,14 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                     vm->PC += 2;
                 break;
 
+                // EX9E
+                // Skips the next instruction if the key stored in VX is pressed
+                case 0xE:
+                    if ((vm->V[SLIP_OP_B(opcode)] & vm->keys) == vm->keys)
+                        vm->PC += 2;
+                    vm->PC += 2;
+                break;
+
                 // 8***
                 // Arithmetic opcodes
                 case 0x8:
