@@ -196,6 +196,23 @@ void test_8XYE(SlipConfig* config) {
 }
 
 
+void test_9XY0(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V1 to 0x28
+    slipOpcodeDispatch(vm, 0x6128);
+
+    // Set V2 to 0x82
+    slipOpcodeDispatch(vm, 0x6282);
+
+    // Skip next instruction
+    slipOpcodeDispatch(vm, 0x9120);
+    assertEqual(vm->PC == 0x8, "Should skip instruction if V1 and V2 are unequal");
+    printf("PC: %d\n", vm->PC);
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -215,6 +232,7 @@ int main() {
     test_8XY6(&config);
     test_8XY7(&config);
     test_8XYE(&config);
+    test_9XY0(&config);
 
     printf("\n");
     printf("Tests done.\n");

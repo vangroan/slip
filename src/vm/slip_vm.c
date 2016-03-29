@@ -211,6 +211,14 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                     vm->PC += 2;
                 break;
 
+                // 9XY0
+                // Skip next instruction if VX does not equal VY
+                case 0x9:
+                    if (vm->V[SLIP_OP_B(opcode)] != vm->V[SLIP_OP_B(opcode)])
+                        vm->PC += 2;
+                    vm->PC += 2;
+                break;
+
                 // 8***
                 // Arithmetic opcodes
                 case 0x8:
