@@ -69,9 +69,7 @@ SlipVM* slipNewVM(SlipConfig* config) {
     vm->display = (SlipByte*)malloc(SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT * sizeof(SlipByte));
 
     // Keys
-    for (int i = 0; i < SLIP_KEYS; i++) {
-        vm->keys[i] = 0x0;
-    }
+    vm->keys = 0x0000;
 
     // Program Counter
     vm->PC = 0x0;
@@ -128,6 +126,16 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
         }
     }
     
+}
+
+
+void slipKeyDown(SlipVM* vm, const uint16_t keys) {
+    vm->keys |= keys;
+}
+
+
+void slipKeyUp(SlipVM* vm, const uint16_t keys) {
+    vm->keys &= ~keys;
 }
 
 

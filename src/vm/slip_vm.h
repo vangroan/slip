@@ -25,8 +25,23 @@
 #define SLIP_SCREEN_WIDTH 64
 #define SLIP_SCREEN_HEIGHT 32
 
-// The number of keyboard keys that can be entered.
-#define SLIP_KEYS 16
+// The keyboard keys that can be entered.
+#define SLIP_KEY_0 ((unsigned char)0x0001)
+#define SLIP_KEY_1 0x0002
+#define SLIP_KEY_2 0x0004
+#define SLIP_KEY_3 0x0008
+#define SLIP_KEY_4 0x0010
+#define SLIP_KEY_5 0x0020
+#define SLIP_KEY_6 0x0040
+#define SLIP_KEY_7 0x0080
+#define SLIP_KEY_8 0x0100
+#define SLIP_KEY_9 0x0200
+#define SLIP_KEY_A 0x0400
+#define SLIP_KEY_B 0x0800
+#define SLIP_KEY_C 0x1000
+#define SLIP_KEY_D 0x2000
+#define SLIP_KEY_E 0x4000
+#define SLIP_KEY_F 0x8000
 
 // The size of the subroutine call stack
 #define SLIP_STACK 16
@@ -106,9 +121,8 @@ struct SlipVM {
     // TODO: Consider using different typedef for boolean flags
     SlipByte* display;
 
-    // The keyboard keys that are pressed, stored as flags. The keyboard is 
-    // labeled with hex numbers from 0 to F.
-    SlipByte keys[SLIP_KEYS];
+    // The keyboard keys that are pressed, stored as bits in an int
+    uint16_t keys;
 
     // The program counter.
     int16_t PC;
@@ -132,6 +146,11 @@ void slipFreeVM(SlipVM* vm);
 
 
 void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode);
+
+
+void slipKeyDown(SlipVM* vm, const uint16_t keys);
+
+void slipKeyUp(SlipVM* vm, const uint16_t keys);
 
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode);

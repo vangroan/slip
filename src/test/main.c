@@ -237,6 +237,23 @@ void test_BNNN(SlipConfig* config) {
 }
 
 
+void test_keys(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Press key A and B down
+    slipKeyDown(vm, SLIP_KEY_A | SLIP_KEY_B);
+    assertEqual((vm->keys & SLIP_KEY_A) == SLIP_KEY_A, "Should press key A");
+    assertEqual((vm->keys & SLIP_KEY_C) != SLIP_KEY_C, "Should not press other keys");
+
+    // Release key A but not key B
+    slipKeyUp(vm, SLIP_KEY_A);
+    assertEqual((vm->keys & SLIP_KEY_A) == 0x0, "Should release key A");
+    assertEqual((vm->keys & SLIP_KEY_B) != 0x0, "Should not release key B");
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -261,6 +278,8 @@ int main() {
     test_9XY0(&config);
     test_ANNN(&config);
     test_BNNN(&config);
+
+    test_keys(&config);
 
     printf("\n");
     printf("Tests done.\n");
