@@ -6,7 +6,7 @@ typedef struct SlipBytecode {
 
     unsigned char* buffer;
 
-    int16_t size;
+    uint16_t size;
 
 } SlipBytecode;
 
