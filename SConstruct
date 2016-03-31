@@ -3,7 +3,7 @@ import os
 
 env = Environment(tools=['mingw'],
     CPPPATH=['src'],
-    CFLAGS='-g -Wall --std=c99',
+    CFLAGS='-g -Wall -Wextra --std=c99',
     # TODO: Find better way to point to compiler
     ENV={ 'PATH' : os.environ.get('PATH') },
     )
