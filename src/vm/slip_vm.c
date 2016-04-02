@@ -8,7 +8,7 @@ void seedRandom() {
 }
 
 
-// Prints out the contents of the vm's memory. The `start` argument is 
+// Prints out the contents of the vm's memory. The `start` argument is
 // inclusive and `end` is exclusive.
 void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
     uint16_t newend = end > SLIP_MEM ? SLIP_MEM : end;
@@ -80,17 +80,15 @@ SlipVM* slipNewVM(SlipConfig* config) {
 
 
 void slipFreeVM(SlipVM* vm) {
-
     free(vm->memory);
     free(vm->display);
     free(vm);
-
 }
 
 
 // Load bytecode from buffer into vm memory
 void _slipLoadBytecodeIntoMemory(SlipVM* vm, SlipBytecode* bytecode) {
-    
+
     int16_t i = SLIP_MEM_START;
 
     // TODO: Handle case of bytecode not fitting in memory
@@ -118,7 +116,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
         opcode = (vm->memory[vm->PC] << 8) | vm->memory[vm->PC+1];
         slipOpcodeDispatch(vm, opcode);
 
-        // TODO: Program counter will be incremented by opcodes. For now, break 
+        // TODO: Program counter will be incremented by opcodes. For now, break
         // to avoid infinite loop.
         if (break_after <= 0) {
             break;
@@ -126,7 +124,7 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
             break_after--;
         }
     }
-    
+
 }
 
 
@@ -146,7 +144,7 @@ bool slipIsKeyDown(SlipVM* vm, const uint8_t key) {
 
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
     printf("[0x%04x] 0x%04x ", vm->PC, opcode);
-    
+
     switch (opcode) {
 
         // 00EE
@@ -274,7 +272,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // 8XY0
                         // Sets VX to the value of VY
                         case 0x0:
-                            printf("Set V0x%01x to V0x%01x value V0x%02x", 
+                            printf("Set V0x%01x to V0x%01x value V0x%02x",
                                 SLIP_OP_B(opcode), SLIP_OP_C(opcode),
                                 vm->V[SLIP_OP_C(opcode)]);
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_C(opcode)];
@@ -284,7 +282,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // 8XY1
                         // Sets VX to VX OR VY
                         case 0x1:
-                            printf("Set V0x%01x to V0x%01x OR V0x%01x", 
+                            printf("Set V0x%01x to V0x%01x OR V0x%01x",
                                 SLIP_OP_B(opcode), SLIP_OP_B(opcode),
                                 SLIP_OP_C(opcode));
                             vm->V[SLIP_OP_B(opcode)] |= vm->V[SLIP_OP_C(opcode)];
@@ -294,7 +292,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // 8XY2
                         // Sets VX to VX AND VY
                         case 0x2:
-                            printf("Set V0x%01x to V0x%01x AND V0x%01x", 
+                            printf("Set V0x%01x to V0x%01x AND V0x%01x",
                                 SLIP_OP_B(opcode), SLIP_OP_B(opcode),
                                 SLIP_OP_C(opcode));
                             vm->V[SLIP_OP_B(opcode)] &= vm->V[SLIP_OP_C(opcode)];
@@ -304,7 +302,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // 8XY3
                         // Sets VX to VX XOR VY
                         case 0x3:
-                            printf("Set V0x%01x to V0x%01x XOR V0x%01x", 
+                            printf("Set V0x%01x to V0x%01x XOR V0x%01x",
                                 SLIP_OP_B(opcode), SLIP_OP_B(opcode),
                                 SLIP_OP_C(opcode));
                             vm->V[SLIP_OP_B(opcode)] ^= vm->V[SLIP_OP_C(opcode)];
@@ -315,9 +313,9 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // Adds VY to VX. VF is set to 1 when there's a carry,
                         // and to 0 when there isn't.
                         case 0x4:
-                            printf("Add V%01x to V%01x", SLIP_OP_C(opcode), 
+                            printf("Add V%01x to V%01x", SLIP_OP_C(opcode),
                                 SLIP_OP_B(opcode));
-                            uint16_t result = vm->V[SLIP_OP_B(opcode)] 
+                            uint16_t result = vm->V[SLIP_OP_B(opcode)]
                                             + vm->V[SLIP_OP_C(opcode)];
                             vm->V[0xF] = result > 0xFF ? 1 : 0;
                             vm->V[SLIP_OP_B(opcode)] = (SlipByte) (result & 0xFF);
@@ -328,7 +326,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // VY is subtracted from VX. VF is set to 0 when there's
                         // a borrow, and 1 when there isn't.
                         case 0x5:
-                            printf("Subtract V%01x from V%01x", 
+                            printf("Subtract V%01x from V%01x",
                                 SLIP_OP_C(opcode), SLIP_OP_B(opcode));
                             vm->V[0xF] = vm->V[SLIP_OP_B(opcode)] < vm->V[SLIP_OP_C(opcode)] ? 1 : 0;
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_B(opcode)] - vm->V[SLIP_OP_C(opcode)];
@@ -350,7 +348,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         // VX is subtracted from VY. VF is set to 0 when there's
                         // a borrow, and 1 when there isn't.
                         case 0x7:
-                            printf("Subtract V%01x from V%01x", 
+                            printf("Subtract V%01x from V%01x",
                                 SLIP_OP_B(opcode), SLIP_OP_C(opcode));
                             vm->V[0xF] = vm->V[SLIP_OP_B(opcode)] > vm->V[SLIP_OP_C(opcode)] ? 1 : 0;
                             vm->V[SLIP_OP_B(opcode)] = vm->V[SLIP_OP_C(opcode)] - vm->V[SLIP_OP_B(opcode)];

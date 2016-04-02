@@ -33,7 +33,7 @@
 // The size of the subroutine call stack
 #define SLIP_STACK 16
 
-// Helper macros to get data out of the opcode. The opcode is always 16-bits 
+// Helper macros to get data out of the opcode. The opcode is always 16-bits
 // (2-bytes)
 #define SLIP_OP_A(opcode) ((opcode & 0xF000) >> 12)
 #define SLIP_OP_B(opcode) ((opcode & 0x0F00) >> 8)
@@ -60,7 +60,7 @@ typedef void (*SlipWriteFn)(const char* message);
 
 
 struct SlipConfig {
-    
+
     SlipInputFn inputFn;
 
     SlipDisplayFn displayFn;
@@ -94,7 +94,7 @@ struct SlipVM {
     // the program counter to the address.
     int16_t stack[SLIP_STACK];
 
-    // The delay timer. It is used for timing events in games, and counts down 
+    // The delay timer. It is used for timing events in games, and counts down
     // at 60 hertz.
     SlipByte delayTimer;
 

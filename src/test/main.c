@@ -11,7 +11,7 @@ void test_1NNN(SlipConfig* config) {
 
     // Jump to 0x0500
     slipOpcodeDispatch(vm, 0x1500);
-    
+
     assertEqual(vm->PC == 0x0500, "Should jump to address");
 
     slipFreeVM(vm);
@@ -96,7 +96,7 @@ void test_8XY2(SlipConfig* config) {
 
 void test_8XY3(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
-    
+
     // Set V3 to 0x0C (bx1100)
     slipOpcodeDispatch(vm, 0x630C);
 
@@ -240,7 +240,7 @@ void test_BNNN(SlipConfig* config) {
 void test_EX9E(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
-    
+
 
     slipFreeVM(vm);
 }
@@ -254,7 +254,7 @@ void test_keys(SlipConfig* config) {
     slipKeyDown(vm, 0xB);
     assertEqual(slipIsKeyDown(vm, 0xA), "Should press key A");
     assertEqual(!slipIsKeyDown(vm, 0xC), "Should not press other keys");
-    
+
     // Release key A but not key B
     slipKeyUp(vm, 0xA);
     assertEqual(!slipIsKeyDown(vm, 0xA), "Should release key A");
