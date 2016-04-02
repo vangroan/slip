@@ -264,6 +264,15 @@ void test_keys(SlipConfig* config) {
 }
 
 
+void test_display(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    slipDumpDisplay(vm);
+
+    slipFreeVM(vm);
+}
+
+
 int main() {
     printf("Running tests\n");
     printf("-------------\n\n");
@@ -291,6 +300,8 @@ int main() {
     test_EX9E(&config);
 
     test_keys(&config);
+
+    test_display(&config);
 
     printf("\n");
     printf("Tests done.\n");

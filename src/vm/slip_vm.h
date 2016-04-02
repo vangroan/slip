@@ -150,4 +150,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode);
 void slipDumpKeys(SlipVM* vm);
 
 
+void slipDumpDisplay(SlipVM* vm);
+
+
 #endif

@@ -65,7 +65,10 @@ SlipVM* slipNewVM(SlipConfig* config) {
     vm->soundTimer = 0x0;
 
     // Display
-    vm->display = (SlipByte*)malloc(SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT * sizeof(SlipByte));
+    vm->display = malloc(SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT * sizeof(SlipByte));
+    for (int i = 0; i < (SLIP_SCREEN_WIDTH * SLIP_SCREEN_HEIGHT); i++) {
+        vm->display[i] = 0x0;
+    }
 
     // Keys
     for (int i = 0; i < SLIP_NUM_KEYS; i++) {
@@ -379,5 +382,22 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
 void slipDumpKeys(SlipVM* vm) {
     for (int i = 0; i < SLIP_NUM_KEYS; i++) {
         printf("0x%02x %s\n", i, vm->keys[i] ? "down" : "up");
+    }
+}
+
+
+void slipDumpDisplay(SlipVM* vm) {
+    unsigned char linebuf[SLIP_SCREEN_WIDTH+1];
+    SlipByte* display = vm->display;
+
+    linebuf[SLIP_SCREEN_WIDTH+1] = '\0';
+
+    for (int y = 0; y < SLIP_SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SLIP_SCREEN_WIDTH; x++) {
+            int i = x + y * SLIP_SCREEN_WIDTH;
+            linebuf[x] = display[i] != 0 ? '#' : ' ';
+        }
+        //printf("%s\n", linebuf);
+        printf("%s\n", linebuf);
     }
 }
