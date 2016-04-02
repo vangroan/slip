@@ -370,6 +370,21 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                         break;
                     }
                 break;
+
+                case 0xF:
+                    switch(SLIP_OP_CD(opcode)) {
+
+                        // FX55
+                        // Stores contents of V0 to VX (including VX) in memory
+                        // starting at address stored in I.
+                        case 0x55:
+                            for (int v = 0; v <= SLIP_OP_B(opcode); v++) {
+                                vm->memory[vm->I + v] = vm->V[v];
+                            }
+                            vm->PC += 2;
+                        break;
+                    }
+                break;
             }
         break;
     }
