@@ -8,24 +8,6 @@ void seedRandom() {
 }
 
 
-// Prints out the contents of the vm's memory. The `start` argument is
-// inclusive and `end` is exclusive.
-void _dumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
-    uint16_t newend = end > SLIP_MEM ? SLIP_MEM : end;
-
-    // end before start is invalid
-    if (start > newend) {
-        uint16_t tmp = newend;
-        newend = start;
-        start = tmp;
-    }
-
-    for (uint16_t i = start; i < newend; i++) {
-        printf("[0x%04x] 0x%02x\n", i, vm->memory[i]);
-    }
-}
-
-
 void slipInitConfig(SlipConfig* config) {
     config->inputFn = NULL;
     config->displayFn = NULL;
@@ -112,8 +94,6 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
     // Break out of loop after counter reaches 0
     int break_after = 10;
 
-    _dumpMemoryRange(vm, 0x200, 0x200 + bytecode->size);
-
     // TODO: Use for loop
     while (vm->PC < SLIP_MEM-1) {
         opcode = (vm->memory[vm->PC] << 8) | vm->memory[vm->PC+1];
@@ -142,6 +122,35 @@ void slipKeyUp(SlipVM* vm, const uint8_t key) {
 
 bool slipIsKeyDown(SlipVM* vm, const uint8_t key) {
     return vm->keys[key % SLIP_NUM_KEYS];
+}
+
+
+static void
+draw(SlipVM* vm, const SlipByte x, const SlipByte y, const SlipByte rows) {
+    printf("Drawing (%d, %d) n=%d\n", x, y, rows);
+    bool collision = false;
+
+    for (int n = 0; n < rows; n++) {
+        // Coordinates are wrapped around the edge of the screen.
+        int i = (x % SLIP_SCREEN_WIDTH)
+                + ((y + n) % SLIP_SCREEN_HEIGHT) * SLIP_SCREEN_WIDTH;
+        SlipByte spriteRow = vm->memory[vm->I + n];
+
+        for (int b = 7; b >= 0; b--) {
+            SlipByte pixel = (spriteRow >> b) & 0x1;
+
+            // Pixels are XORed to the screen. If the flipping clears a pixel,
+            // the flag register is set to 1, otherwise 0.
+            SlipByte prev = vm->display[i];
+            vm->display[i] ^= pixel;
+            if (prev == 1 && vm->display[i] == 0)
+                collision = true;
+            printf("%d", vm->display[i]);
+        }
+        printf("\n");
+    }
+
+    vm->V[0xF] = collision ? 1 : 0;
 }
 
 
@@ -264,6 +273,14 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                 case 0xE:
                     if (slipIsKeyDown(vm, vm->V[SLIP_OP_B(opcode)]))
                         vm->PC += 2;
+                    vm->PC += 2;
+                break;
+
+                // DXYN
+                // Draws sprite pointed to by register I.
+                case 0xD:
+                    draw(vm, SLIP_OP_B(opcode), SLIP_OP_C(opcode),
+                        SLIP_OP_D(opcode));
                     vm->PC += 2;
                 break;
 
@@ -394,6 +411,25 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
 }
 
 
+// Prints out the contents of the vm's memory. The `start` argument is
+// inclusive and `end` is exclusive.
+void slipDumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end) {
+    printf("Memory Dump\n");
+    uint16_t newend = end > SLIP_MEM ? SLIP_MEM : end;
+
+    // end before start is invalid
+    if (start > newend) {
+        uint16_t tmp = newend;
+        newend = start;
+        start = tmp;
+    }
+
+    for (uint16_t i = start; i < newend; i++) {
+        printf("[0x%04x] 0x%02x\n", i, vm->memory[i]);
+    }
+}
+
+
 void slipDumpKeys(SlipVM* vm) {
     for (int i = 0; i < SLIP_NUM_KEYS; i++) {
         printf("0x%02x %s\n", i, vm->keys[i] ? "down" : "up");
@@ -412,7 +448,6 @@ void slipDumpDisplay(SlipVM* vm) {
             int i = x + y * SLIP_SCREEN_WIDTH;
             linebuf[x] = display[i] != 0 ? '#' : ' ';
         }
-        //printf("%s\n", linebuf);
         printf("%s\n", linebuf);
     }
 }

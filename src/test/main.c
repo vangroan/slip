@@ -267,6 +267,42 @@ void test_keys(SlipConfig* config) {
 void test_display(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
+    printf("Draw test\n");
+
+    // Store sprite at 0x200
+    //     0 1 2 3 4 5 6 7
+    // 0 | 0 0 0 1 1 0 0 0 | 0x18
+    // 1 | 0 0 1 0 0 1 0 0 | 0x24
+    // 2 | 0 1 0 0 0 0 1 0 | 0x42
+    // 3 | 1 0 0 1 1 0 0 1 | 0x99
+    // 4 | 1 0 0 1 1 0 0 1 | 0x99
+    // 5 | 0 1 0 0 0 0 1 0 | 0x42
+    // 6 | 0 0 1 0 0 1 0 0 | 0x24
+    // 7 | 0 0 0 1 1 0 0 0 | 0x18
+
+    slipOpcodeDispatch(vm, 0x6018);
+    slipOpcodeDispatch(vm, 0x6124);
+    slipOpcodeDispatch(vm, 0x6242);
+    slipOpcodeDispatch(vm, 0x6399);
+    slipOpcodeDispatch(vm, 0x6499);
+    slipOpcodeDispatch(vm, 0x6542);
+    slipOpcodeDispatch(vm, 0x6624);
+    slipOpcodeDispatch(vm, 0x6718);
+
+    slipOpcodeDispatch(vm, 0xA200);
+    slipOpcodeDispatch(vm, 0xF755);
+
+    slipDumpMemoryRange(vm, 0x200, 0x208);
+
+    // Set V1 to 28 for X coordinate
+    slipOpcodeDispatch(vm, 0x611C);
+
+    // Set V2 to 12 for Y coordinate
+    slipOpcodeDispatch(vm, 0x620C);
+
+    // Draw sprite to (28, 12)
+    slipOpcodeDispatch(vm, 0xD128);
+
     slipDumpDisplay(vm);
 
     slipFreeVM(vm);

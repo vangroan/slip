@@ -147,6 +147,9 @@ bool slipIsKeyDown(SlipVM* vm, const uint8_t key);
 void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode);
 
 
+void slipDumpMemoryRange(SlipVM* vm, uint16_t start, uint16_t end);
+
+
 void slipDumpKeys(SlipVM* vm);
 
 
