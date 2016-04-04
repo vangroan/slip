@@ -131,12 +131,15 @@ draw(SlipVM* vm, const SlipByte x, const SlipByte y, const SlipByte rows) {
     bool collision = false;
 
     for (int n = 0; n < rows; n++) {
-        // Coordinates are wrapped around the edge of the screen.
-        int i = (x % SLIP_SCREEN_WIDTH)
-                + ((y + n) % SLIP_SCREEN_HEIGHT) * SLIP_SCREEN_WIDTH;
         SlipByte spriteRow = vm->memory[vm->I + n];
 
         for (int b = 7; b >= 0; b--) {
+            // Coordinates are wrapped around the edge of the screen. The X
+            // coordinate must increase with the column position of the sprite
+            // row.
+            int i = ((x + (7 - b)) % SLIP_SCREEN_WIDTH)
+                    + ((y + n) % SLIP_SCREEN_HEIGHT) * SLIP_SCREEN_WIDTH;
+
             SlipByte pixel = (spriteRow >> b) & 0x1;
 
             // Pixels are XORed to the screen. If the flipping clears a pixel,
@@ -145,9 +148,8 @@ draw(SlipVM* vm, const SlipByte x, const SlipByte y, const SlipByte rows) {
             vm->display[i] ^= pixel;
             if (prev == 1 && vm->display[i] == 0)
                 collision = true;
-            printf("%d", vm->display[i]);
+            //printf("%d", vm->display[i]);
         }
-        printf("\n");
     }
 
     vm->V[0xF] = collision ? 1 : 0;
@@ -279,7 +281,7 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                 // DXYN
                 // Draws sprite pointed to by register I.
                 case 0xD:
-                    draw(vm, SLIP_OP_B(opcode), SLIP_OP_C(opcode),
+                    draw(vm, vm->V[SLIP_OP_B(opcode)], vm->V[SLIP_OP_C(opcode)],
                         SLIP_OP_D(opcode));
                     vm->PC += 2;
                 break;
