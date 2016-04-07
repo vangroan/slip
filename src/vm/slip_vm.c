@@ -402,6 +402,16 @@ void slipOpcodeDispatch(SlipVM* vm, uint16_t opcode) {
                             }
                             vm->PC += 2;
                         break;
+
+                        // FX65
+                        // Stores contents of memory starting at I in registers
+                        // V0 to VX (including VX).
+                        case 0x65:
+                            for (int v = 0; v <= SLIP_OP_B(opcode); v++) {
+                                vm->V[v] = vm->memory[vm->I + v];
+                            }
+                            vm->PC += 2;
+                        break;
                     }
                 break;
             }
@@ -457,4 +467,8 @@ void slipDumpDisplay(SlipVM* vm) {
 
 SlipByte slipGetMem(SlipVM* vm, const uint16_t address) {
     return vm->memory[address % SLIP_MEM];
+}
+
+void slipSetMem(SlipVM* vm, uint16_t address, SlipByte value) {
+    vm->memory[address] = value;
 }

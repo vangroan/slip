@@ -158,5 +158,7 @@ void slipDumpDisplay(SlipVM* vm);
 
 SlipByte slipGetMem(SlipVM* vm, const uint16_t address);
 
+void slipSetMem(SlipVM* vm, uint16_t address, SlipByte value);
+
 
 #endif

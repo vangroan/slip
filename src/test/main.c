@@ -275,6 +275,25 @@ void test_FX55(SlipConfig* config) {
 }
 
 
+void test_FX65(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    slipSetMem(vm, 0x20A, 0x1);
+    slipSetMem(vm, 0x20B, 0x2);
+    slipSetMem(vm, 0x20C, 0x3);
+    slipSetMem(vm, 0x20D, 0x4);
+    slipOpcodeDispatch(vm, 0xA20A);
+
+    slipOpcodeDispatch(vm, 0xF265);
+    assertEqual(vm->V[0x0] == 0x1, "Should set V0 to 0x1");
+    assertEqual(vm->V[0x1] == 0x2, "Should set V1 to 0x2");
+    assertEqual(vm->V[0x2] == 0x3, "Should set V2 to 0x3");
+    assertEqual(vm->V[0x3] == 0, "Should not set V3");
+
+    slipFreeVM(vm);
+}
+
+
 void test_keys(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
@@ -364,6 +383,7 @@ int main() {
     test_BNNN(&config);
     test_EX9E(&config);
     test_FX55(&config);
+    test_FX65(&config);
 
     test_keys(&config);
 
