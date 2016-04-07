@@ -246,6 +246,35 @@ void test_EX9E(SlipConfig* config) {
 }
 
 
+void test_FX55(SlipConfig* config) {
+    SlipVM* vm = slipNewVM(config);
+
+    // Set V0 to 0x1
+    slipOpcodeDispatch(vm, 0x6001);
+
+    // Set V1 to 0x2
+    slipOpcodeDispatch(vm, 0x6102);
+
+    // Set V2 to 0x3
+    slipOpcodeDispatch(vm, 0x6203);
+
+    // Set V3 to 0x4
+    slipOpcodeDispatch(vm, 0x6304);
+
+    // Set I to 0x20A
+    slipOpcodeDispatch(vm, 0xA20A);
+
+    // Store V0-V2 in 0x20A-0x20C
+    slipOpcodeDispatch(vm, 0xF255);
+    assertEqual(slipGetMem(vm, 0x20A) == 0x1, "Should set 0x20A to 0x1");
+    assertEqual(slipGetMem(vm, 0x20B) == 0x2, "Should set 0x20B to 0x2");
+    assertEqual(slipGetMem(vm, 0x20C) == 0x3, "Should set 0x20C to 0x3");
+    assertEqual(slipGetMem(vm, 0x20D) == 0x0, "Should not set 0x20D");
+
+    slipFreeVM(vm);
+}
+
+
 void test_keys(SlipConfig* config) {
     SlipVM* vm = slipNewVM(config);
 
@@ -334,6 +363,7 @@ int main() {
     test_ANNN(&config);
     test_BNNN(&config);
     test_EX9E(&config);
+    test_FX55(&config);
 
     test_keys(&config);
 
