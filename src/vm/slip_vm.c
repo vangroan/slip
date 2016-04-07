@@ -453,3 +453,8 @@ void slipDumpDisplay(SlipVM* vm) {
         printf("%s\n", linebuf);
     }
 }
+
+
+SlipByte slipGetMem(SlipVM* vm, const uint16_t address) {
+    return vm->memory[address % SLIP_MEM];
+}

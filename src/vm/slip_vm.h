@@ -156,4 +156,7 @@ void slipDumpKeys(SlipVM* vm);
 void slipDumpDisplay(SlipVM* vm);
 
 
+SlipByte slipGetMem(SlipVM* vm, const uint16_t address);
+
+
 #endif
