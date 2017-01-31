@@ -135,6 +135,15 @@ void slipFreeVM(SlipVM* vm);
 void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode);
 
 
+void slipLoad(SlipVM* vm, SlipBytecode* bytecode);
+
+
+void slipReset(SlipVM* vm);
+
+
+void slipStep(SlipVM* vm);
+
+
 void slipKeyDown(SlipVM* vm, const uint8_t key);
 
 

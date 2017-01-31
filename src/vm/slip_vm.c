@@ -111,6 +111,22 @@ void slipInterpretBytecode(SlipVM* vm, SlipBytecode* bytecode) {
 }
 
 
+void slipLoad(SlipVM* vm, SlipBytecode* bytecode) {
+    _slipLoadBytecodeIntoMemory(vm, bytecode);
+}
+
+
+void slipReset(SlipVM* vm) {
+    vm->PC = SLIP_MEM_START;
+}
+
+
+void slipStep(SlipVM* vm) {
+    uint16_t opcode = (vm->memory[vm->PC] << 8) | vm->memory[vm->PC+1];
+    slipOpcodeDispatch(vm, opcode);
+}
+
+
 void slipKeyDown(SlipVM* vm, const uint8_t key) {
     vm->keys[key % SLIP_NUM_KEYS] = true;
 }

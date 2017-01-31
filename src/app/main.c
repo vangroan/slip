@@ -63,7 +63,8 @@ main(int argc, char* argv[]) {
     slipLoadBytecode(&bytecode, "sample/hello_world.ch8");
 
     SlipVM* vm = slipNewVM(&config);
-    slipInterpretBytecode(vm, &bytecode);
+	slipReset(vm);
+    // slipInterpretBytecode(vm, &bytecode);
 
 	SDL_Event event;
     bool running = true;
@@ -76,6 +77,8 @@ main(int argc, char* argv[]) {
 				case SDL_QUIT: running = false;
 			}
 		}
+
+		slipStep(vm);
 
 		SDL_SetRenderDrawColor(ren, 100, 200, 255, 255);
 		SDL_RenderClear(ren);
